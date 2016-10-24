@@ -23,6 +23,17 @@ function moveCursor(nextPos) {
     }
 }
 
+function moveCursorWithMistake(nextPos) {
+    if(nextPos > 0 && nextPos <= fullText.length) {
+        $('#crka' + (nextPos - 1)).addClass('txtMistake');
+        $('#crka' + (nextPos - 1)).removeClass('txtModro');
+        $('#crka' + (nextPos - 1)).removeClass('txtRdece');
+    }
+    if (nextPos < fullText.length) {
+        $('#crka' + nextPos).addClass('txtModro');
+    }
+}
+
 // End of typing.
 function doKonec() {
     $('#crka' + (fullText.length - 1)).addClass('txtZeleno');
@@ -149,11 +160,37 @@ function keyPressed(e) {
         currentChar = fullText[currentPos + 1];
         currentPos++;
         return true;
-    } else if(keychar == ' ') { // I don't remember why we're having this if.
-        return false;
-    } else {
+    }
+    else {
+        if(currentPos == fullText.length - 1) {  // END.
+            $('#tb1').val($('#tb1').val() + currentChar);
+            var elemOff = new keyboardElement(currentChar);
+            elemOff.turnOff();
+            doKonec();
+            return true;
+        }
+
+        if (currentPos < fullText.length - 1) {
+            var nextChar = fullText[currentPos + 1];
+            if (show_keyboard) {
+                var thisE = new keyboardElement(currentChar);
+                thisE.turnOff();
+                if (isCombined(nextChar) && (thisE.shift || thisE.alt || thisE.pow || thisE.uppercase_umlaut)) {
+                    combinedCharWait = true;
+                }
+                var nextE = new keyboardElement(nextChar);
+                nextE.turnOn();
+            }
+            if (isCombined(nextChar)) {
+                $("#form1").off("keypress", "#tb1", keyPressed);
+                $("#form1").on("keyup", "#tb1", keyupFirst);
+            }
+        }
+        moveCursorWithMistake(currentPos + 1);
+        currentChar = fullText[currentPos + 1];
+        currentPos++;
         napake++;
-        return false;
+        return true;
     }
 }
 
