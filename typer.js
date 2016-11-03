@@ -56,7 +56,7 @@ function doKonec() {
     $('input[name="rpSpeedInput"]').val(speed);
     $('#tb1').attr('disabled', 'disabled');
     $('#btnContinue').css('visibility', 'visible');
-	// Change to preven negative WPM display.
+	// Change to prevent negative WPM display.
     var wpm = (speed / 5) - napake;
 	//var wpm = (Math.max(0,((speed / 5) - napake)));
     $('#jsWpm').html(wpm.toFixed(2));
@@ -75,7 +75,7 @@ function getPressedChar(e) {
     }
     if (keynum == 13) {
         keychar = '\n';
-        // This hack is needed for Spanis keyboard, which uses 161 for some character.
+        // This hack is needed for Spanish keyboard, which uses 161 for some character.
     } else if ((!keynum || keynum == 160 || keynum == 161) && (keynum != 161 && THE_LAYOUT != 'Spanish')) {
         keychar = '[not_yet_defined]';
     } else {
